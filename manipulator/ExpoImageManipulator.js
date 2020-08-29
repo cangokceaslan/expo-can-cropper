@@ -349,7 +349,10 @@ class ExpoImageManipulator extends Component {
                                         <TouchableOpacity onPress={() => this.onFlipImage('horizontal')} style={{ marginLeft: 10, width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}>
                                             <Image source={require('../assets/flip-horizontal.png')} style={{ width: 24, height: 24 }}></Image>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => { onPictureChoosed({ uri, base64 }); this.onToggleModal() }} style={{ marginLeft: 10, width: 60, height: 32, alignItems: 'center', justifyContent: 'center' }}>
+                                        <TouchableOpacity onPress={() => {
+                                            onPictureChoosed({ uri, base64 });
+                                            this.props.onProgressModal()
+                                        }} style={{ marginLeft: 10, width: 60, height: 32, alignItems: 'center', justifyContent: 'center' }}>
                                             <Text style={{ fontWeight: '500', color: 'white', fontSize: 18 }}>{this.props.btnTexts.done}</Text>
                                         </TouchableOpacity>
                                     </View>
@@ -388,7 +391,7 @@ class ExpoImageManipulator extends Component {
                             <AutoHeightImage
                                 style={{ backgroundColor: 'black', flex: 1 }}
                                 source={{ uri }}
-                                resizeMode={imageRatio >= 1 ? "cover" : 'cover'}
+                                resizeMode={imageRatio >= 1 ? "contain" : 'contain'}
                                 width={width}
                                 height={originalHeight}
                                 onLayout={this.calculateMaxSizes}
@@ -437,6 +440,7 @@ ExpoImageManipulator.propTypes = {
     saveOptions: PropTypes.object,
     photo: PropTypes.object.isRequired,
     onToggleModal: PropTypes.func.isRequired,
+    onProgressModal: PropTypes.func.isRequired,
     dragVelocity: PropTypes.number,
     resizeVelocity: PropTypes.number,
     squareAspect: PropTypes.bool
