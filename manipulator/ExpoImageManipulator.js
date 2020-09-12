@@ -8,7 +8,7 @@ import {
     Text,
     SafeAreaView,
     TouchableOpacity,
-    YellowBox
+    YellowBox,
 } from 'react-native'
 import * as ImageManipulator from 'expo-image-manipulator'
 import * as FileSystem from 'expo-file-system'
@@ -330,7 +330,9 @@ class ExpoImageManipulator extends Component {
                     <SafeAreaView
                         style={{ width, flexDirection: 'row', backgroundColor: 'black', justifyContent: 'space-between' }}
                     >
-                        <ScrollView scrollEnabled={false} horizontal contentContainerStyle={{ width: '100%', paddingHorizontal: 15, height: 44, alignItems: 'center' }}>
+                        <ScrollView scrollEnabled={false} horizontal contentContainerStyle={{
+                            width: '100%', paddingHorizontal: 15, height: 44, alignItems: 'center'
+                        }}>
                             {!cropMode ?
                                 <View style={{ flexDirection: 'row' }}>
                                     <TouchableOpacity onPress={() => this.onToggleModal()} style={{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}>
@@ -370,10 +372,12 @@ class ExpoImageManipulator extends Component {
                             }
                         </ScrollView>
                     </SafeAreaView>
-                    <View style={{ flex: 1, backgroundColor: 'black', width: Dimensions.get('window').width }}>
+                    <View style={{ backgroundColor: 'black', width: Dimensions.get('window').width, height: Dimensions.get('window').height }}>
                         <ScrollView
                             ref={'imageScrollView'}
-                            style={{ position: 'relative', flex: 1 }}
+                            style={{
+                                position: 'absolute', flex: 1
+                            }}
                             contentContainerStyle={{ backgroundColor: 'black' }}
                             maximumZoomScale={5}
                             minimumZoomScale={0.5}
@@ -389,7 +393,13 @@ class ExpoImageManipulator extends Component {
                         // pinchGestureEnabled={cropMode ? false : pinchGestureEnabled}
                         >
                             <AutoHeightImage
-                                style={{ backgroundColor: 'black', flex: 1 }}
+                                style={{
+                                    position: 'relative',
+                                    margin: 'auto',
+                                    width: width,
+                                    height: originalHeight,
+                                    backgroundColor: 'black',
+                                }}
                                 source={{ uri }}
                                 resizeMode={imageRatio >= 1 ? "contain" : 'contain'}
                                 width={width}

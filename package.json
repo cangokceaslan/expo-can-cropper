@@ -1,8 +1,8 @@
 {
   "_from": "expo-can-cropper@latest",
-  "_id": "expo-can-cropper@1.0.3",
+  "_id": "expo-can-cropper@1.0.4",
   "_inBundle": false,
-  "_integrity": "sha512-otN/Wf12e0o2tNA6iUzzcKPh+aXzLAkyH4+b6j7m6Orev6Ev1n/NFOfRC07A6oxe7BGNN+B0niF6imw64tuxNA==",
+  "_integrity": "sha512-tGkU9qUsfiV62kLww2YCeQclGf5+BsD0XcTXez29TqTZjH5pZH34z2O0Jzpt6pADVTjNTssV6Ptyo8UQX/LjBw==",
   "_location": "/expo-can-cropper",
   "_phantomChildren": {
     "@babel/code-frame": "7.10.4",
@@ -66,8 +66,8 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/expo-can-cropper/-/expo-can-cropper-1.0.3.tgz",
-  "_shasum": "a459281990fbcbff97a11a9705f45a230667cf60",
+  "_resolved": "https://registry.npmjs.org/expo-can-cropper/-/expo-can-cropper-1.0.4.tgz",
+  "_shasum": "034fb3a6dfd3b65a04a37d025d5a25c58b7ebebb",
   "_spec": "expo-can-cropper@latest",
   "_where": "C:\\Users\\Gokceaslan\\Documents\\GitHub\\Bartme\\app38",
   "author": "",
