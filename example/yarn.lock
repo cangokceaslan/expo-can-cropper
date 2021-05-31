@@ -1232,9 +1232,9 @@ acorn-jsx@^5.0.0:
   integrity sha512-tMUqwBWfLFbJbizRmEcWSLw6HnFzfdJs2sOJEOwwtVPMoH/0Ay+E703oZz78VSXZiiDcZrQ5XKjPIUQixhmgVw==
 
 acorn@^6.0.7:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.0.tgz#b659d2ffbafa24baf5db1cdbb2c94a983ecd2784"
-  integrity sha512-gac8OEcQ2Li1dxIEWGZzsp2BitJxwkwcOm0zHAJLcPJaVvm58FRnk6RkuLRpU1EujipU2ZFODv2P9DLMfnV8mw==
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
+  integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
 
 ajv@^6.10.2, ajv@^6.9.1:
   version "6.11.0"
@@ -3724,9 +3724,9 @@ lodash.unescape@4.0.1:
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
 lodash@^4.0.0, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.5.0, lodash@^4.6.0:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
-  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 log-symbols@^2.2.0:
   version "2.2.0"
@@ -4809,10 +4809,10 @@ react-native-auto-height-image@^1.0.5:
     prop-types "^15.7.2"
     react-native-android-image-polyfill "^1.0.0"
 
-react-native-expo-image-cropper@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/react-native-expo-image-cropper/-/react-native-expo-image-cropper-0.0.6.tgz#1a9165bccbae8a38b9d788a93c857bf15da33e92"
-  integrity sha512-6oziGr5USt667pc6zWD36kycO7+oImS7dz9SjSAGDyOXAbHKXowfzuYZt1Lo/hlcKaRiSpMam7/9/p9fPS1Y9w==
+react-native-expo-image-cropper@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-expo-image-cropper/-/react-native-expo-image-cropper-1.0.2.tgz#5065fd5b052c983a3ba8e02dcf770b53a5b73779"
+  integrity sha512-y2jn/UtMVVXnwLY5C3/5vRz4CIuXGsPH7xXju38WFq2tuLuQDxC0wJ5U6msYH7pDPzSkL5ELc2hM76noiN4UtQ==
   dependencies:
     babel-eslint "^10.0.1"
     eslint "^5.11.1"

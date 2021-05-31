@@ -67,9 +67,6 @@ export default class App extends React.Component {
                         photo={{ uri }}
                         isVisible={showModal}
                         onPictureChoosed={(data) => {
-                            Image.getSize(data.uri, (width, height) => {
-                                console.log(width + ', ' + height)
-                            });
                             this.setState({ uri: data.uri })
                         }}
                         onToggleModal={() => this.setState({ showModal: !showModal })}
