@@ -112,12 +112,12 @@ class ImageCropOverlay extends React.Component {
                     <View style={{ top: 0, left: 0, width: '100%', height: '100%', position: 'absolute', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <View style={{ flex: 1 / 3, flexDirection: 'row' }}>
                             <View style={{ flex: 3, borderRightWidth: 1, borderBottomWidth: 1, borderColor: '#c9c9c9', borderStyle: 'solid' }}>
-                                <View style={{ position: 'absolute', left: 5, top: 5, borderLeftWidth: 0, borderTopWidth: 0, height: 48, width: 48, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
+                                <View style={{ position: 'absolute', left: 5, top: 5, borderLeftWidth: 0, borderTopWidth: 0, height: 20, width: 20, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
                             </View>
                             <View style={{ flex: 3, borderRightWidth: 1, borderBottomWidth: 1, borderColor: '#c9c9c9', borderStyle: 'solid' }}>
                             </View>
                             <View style={{ flex: 3, borderBottomWidth: 1, borderColor: '#c9c9c9', borderStyle: 'solid' }}>
-                                <View style={{ position: 'absolute', right: 5, top: 5, borderRightWidth: 0, borderTopWidth: 0, height: 48, width: 48, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
+                                <View style={{ position: 'absolute', right: 5, top: 5, borderRightWidth: 0, borderTopWidth: 0, height: 20, width: 20, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
                             </View>
                         </View>
                         <View style={{ flex: 1 / 3, flexDirection: 'row' }}>
@@ -130,12 +130,12 @@ class ImageCropOverlay extends React.Component {
                         </View>
                         <View style={{ flex: 1 / 3, flexDirection: 'row' }}>
                             <View style={{ flex: 3, borderRightWidth: 1, borderColor: '#c9c9c9', borderStyle: 'solid', position: 'relative', }}>
-                                <View style={{ position: 'absolute', left: 5, bottom: 5, borderLeftWidth: 0, borderBottomWidth: 0, height: 48, width: 48, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
+                                <View style={{ position: 'absolute', left: 5, bottom: 5, borderLeftWidth: 0, borderBottomWidth: 0, height: 20, width: 20, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
                             </View>
                             <View style={{ flex: 3, borderRightWidth: 1, borderColor: '#c9c9c9', borderStyle: 'solid' }}>
                             </View>
                             <View style={{ flex: 3, position: 'relative' }}>
-                                <View style={{ position: 'absolute', right: 5, bottom: 5, borderRightWidth: 2, borderBottomWidth: 2, height: 48, width: 48, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
+                                <View style={{ position: 'absolute', right: 5, bottom: 5, borderRightWidth: 2, borderBottomWidth: 2, height: 20, width: 20, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
                             </View>
                         </View>
                     </View>
