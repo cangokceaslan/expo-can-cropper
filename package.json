@@ -1,6 +1,6 @@
 {
-  "name": "react-native-expo-image-cropper",
-  "version": "1.0.0",
+  "name": "expo-can-cropper",
+  "version": "1.0.6",
   "description": "Crop, rotate and filp image in your expo project!",
   "main": "index.js",
   "dependencies": {
@@ -25,7 +25,14 @@
     "babel-preset-expo": "^5.0.0"
   },
   "private": false,
-  "keywords": ["expo", "react-native", "crop", "image", "rotate", "flip"],
+  "keywords": [
+    "expo",
+    "react-native",
+    "crop",
+    "image",
+    "rotate",
+    "flip"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/cloudtenlabs/react-native-expo-image-cropper",
   "bugs": {
