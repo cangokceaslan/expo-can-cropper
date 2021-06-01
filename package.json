@@ -1,7 +1,7 @@
 {
   "name": "expo-can-cropper",
-  "version": "1.0.7",
-  "description": "Crop, rotate and filp image in your expo project!",
+  "version": "1.0.8",
+  "description": "Custom Cropper for Square Cropping",
   "main": "index.js",
   "dependencies": {
     "babel-eslint": "^10.0.1",
