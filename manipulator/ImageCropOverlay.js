@@ -20,7 +20,9 @@ class ImageCropOverlay extends React.Component {
         offsetLeft: 0,
         currentlyDragging: false,
         maxWidth: this.props.maxWidth,
-        maxHeight: this.props.maxHeight
+        maxHeight: this.props.maxHeight,
+        currentTop: this.props.initialHeight / 2,
+        currentLeft: this.props.initialWidth / 2
     }
 
     panResponder = {}
@@ -34,24 +36,22 @@ class ImageCropOverlay extends React.Component {
             onPanResponderTermination: this.handlePanResponderEnd,
         })
     }
+    reCalculateSize() {
+        this.setState({
+            initialWidth: this.props.initialWidth,
+            initialHeight: this.props.initialHeight,
+            initialLeft: this.props.initialLeft,
+            initialTop: this.props.initialTop,
+        })
+    }
 
     render() {
         const { draggingTL, draggingTM, draggingTR, draggingML, draggingMM, draggingMR, draggingBL, draggingBM, draggingBR, initialTop, initialLeft, initialHeight, initialWidth, offsetTop, offsetLeft } = this.state
-        const style = { position: 'absolute', flex: 1, zIndex: 9999 }
-        style.top = initialTop + ((draggingTM || draggingTL || draggingTR || draggingMM)
-            ? (draggingTL || draggingTR)
-                ? this.state.currentTop - initialTop
-                : offsetTop
-            : 0)
+        const style = { position: 'absolute', zIndex: 9999 }
+        style.top = initialTop + ((draggingTM || draggingTL || draggingTR || draggingMM) ? offsetTop : 0)
         style.left = initialLeft + ((draggingTL || draggingML || draggingBL || draggingMM) ? offsetLeft : 0)
         style.width = initialWidth + ((draggingTL || draggingML || draggingBL) ? - offsetLeft : (draggingTM || draggingMM || draggingBM) ? 0 : offsetLeft)
         style.height = initialHeight + ((draggingTL || draggingTM || draggingTR) ? - offsetTop : (draggingML || draggingMM || draggingMR) ? 0 : offsetTop)
-        if (draggingTL) {
-            //style.top = style.top - offsetTop;
-        }
-        if (draggingTR) {
-
-        }
         if (style.width > this.props.initialWidth) {
             style.width = this.props.initialWidth
         }
@@ -81,18 +81,21 @@ class ImageCropOverlay extends React.Component {
         this.state.currentTop = style.top;
         this.state.currentLeft = style.left;
         return (
-            <View {...this.panResponder.panHandlers} style={[{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute',
-                borderStyle: 'solid',
-                borderWidth: 2,
-                borderColor: '#a4a4a4',
-                backgroundColor: 'rgb(0,0,0,0.5)',
-                minWidth: 30,
-                minHeight: 30
-            }, style]}>
+            <View {...this.panResponder.panHandlers} ref={(cropper) => this._cropper = cropper} style={[
+                {
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    borderStyle: 'solid',
+                    borderWidth: 2,
+                    borderColor: '#a4a4a4',
+                    backgroundColor: 'rgb(0,0,0,0.5)',
+                    minWidth: 30,
+                    minHeight: 30
+                },
+                style,
+                { ...this.props.style }]}>
                 <View>
                     <View style={{ flexDirection: 'row', width: '100%', flex: 1 / 3, backgroundColor: 'transparent' }}>
                         <View style={{ borderWidth: '#a4a4a4', borderWidth: 0, backgroundColor: draggingTL ? 'transparent' : 'transparent', flex: 1 / 3, height: '100%' }}></View>
@@ -135,7 +138,7 @@ class ImageCropOverlay extends React.Component {
                             <View style={{ flex: 3, borderRightWidth: 1, borderColor: '#c9c9c9', borderStyle: 'solid' }}>
                             </View>
                             <View style={{ flex: 3, position: 'relative' }}>
-                                <View style={{ position: 'absolute', right: 5, bottom: 5, borderRightWidth: 2, borderBottomWidth: 2, height: 20, width: 20, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
+                                <View style={{ position: 'absolute', left: 5, bottom: 5, borderLeftWidth: 0, borderBottomWidth: 0, height: 20, width: 20, borderColor: '#f4f4f4', borderStyle: 'solid' }} />
                             </View>
                         </View>
                     </View>
@@ -145,11 +148,11 @@ class ImageCropOverlay extends React.Component {
     }
 
     getTappedItem(x, y) {
-        const { initialLeft, initialTop, initialWidth, initialHeight } = this.state
+        let { initialLeft, initialTop, initialWidth, initialHeight } = this.state
         let xPos = parseInt((x - initialLeft) / (initialWidth / 3))
-        let yPos = parseInt((y - initialTop - 64) / (initialHeight / 3))
-
-        let index = yPos * 3 + xPos
+        let yPos = parseInt((y - initialTop) / (initialWidth / 3))
+        let index = ((yPos * 3 + xPos) % 9).toFixed(0)
+        return 'mm';
         if (index == 0) {
             return 'mm';
             return 'tl';
@@ -174,9 +177,11 @@ class ImageCropOverlay extends React.Component {
             return 'mm';
             return 'bm';
         } else if (index == 8) {
+            //alert('br')
+            return 'mm';
             return 'br';
         } else {
-            return '';
+            return 'mm';
         }
     }
 
@@ -238,7 +243,6 @@ class ImageCropOverlay extends React.Component {
             offsetTop: 0,
             offsetLeft: 0,
         }
-        state.currentlyDragging = false
         state.initialTop = initialTop + ((draggingTL || draggingTM || draggingTR || draggingMM) ? this.state.currentTop - initialTop/*gestureState.dy*/ : 0)
         state.initialLeft = initialLeft + ((draggingTL || draggingML || draggingBL || draggingMM) ? this.state.currentLeft - initialLeft/* gestureState.dx */ : 0)
         state.initialWidth = initialWidth + ((draggingTL || draggingML || draggingBL) ? - gestureState.dx : (draggingTM || draggingMM || draggingBM) ? 0 : gestureState.dx)
@@ -256,7 +260,7 @@ class ImageCropOverlay extends React.Component {
         if (state.initialHeight < this.props.minHeight) {
             state.initialHeight = this.props.minHeight
         }
-
+        state.currentlyDragging = false
         this.setState(state, () => {
             this.props.onLayoutChanged(state.initialTop, state.initialLeft, state.initialWidth, state.initialHeight)
         })

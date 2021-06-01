@@ -9,7 +9,8 @@ import {
     SafeAreaView,
     TouchableOpacity,
     YellowBox,
-    ActivityIndicator
+    ActivityIndicator,
+    Slider
 } from 'react-native'
 import * as ImageManipulator from 'expo-image-manipulator'
 import * as FileSystem from 'expo-file-system'
@@ -42,7 +43,8 @@ class ExpoImageManipulator extends Component {
                 height: 1
             },
             images: [{ uri: this.props.photo.uri }],
-            cropped: false
+            cropped: false,
+            sliderValue: 100
         }
 
         this.scrollOffset = 0
@@ -124,26 +126,21 @@ class ExpoImageManipulator extends Component {
                     scaleY
                 })
 
-                this.actualSize.width = croppedWidth
-                this.actualSize.height = croppedHeight
-
                 this.setState({
                     uri: uriCroped,
                     base64,
                     cropMode: false,
                     processing: false,
                     images: [...this.state.images, {
-                        uri: uriCroped, cropped: true
+                        uri: uriCroped,
+                        width: actualWidth,
+                        height: actualHeight,
+                        ratio: actualWidth / actualHeight,
+                        cropped: true
                     }]
                 })
-            } else {
-                this.setState({
-                    cropMode: false,
-                    processing: false,
-                    images: [...this.state.images, {
-                        uri, cropped: false
-                    }]
-                })
+                this.actualSize.width = croppedWidth * scaleX
+                this.actualSize.height = croppedHeight * scaleY
             }
         })
     }
@@ -163,7 +160,8 @@ class ExpoImageManipulator extends Component {
             const { uri: rotUri, base64 } = await this.rotate(uriToCrop, width2, height2)
             this.setState({
                 uri: rotUri,
-                base64, processing: false,
+                base64,
+                processing: false,
                 images: [...this.state.images, { uri: rotUri, cropped: false }]
             })
         })
@@ -181,8 +179,13 @@ class ExpoImageManipulator extends Component {
             uriToCrop = response.uri
         }
         Image.getSize(uri, async (width2, height2) => {
-            const { uri: rotUri, base64 } = await this.filp(uriToCrop, orientation)
-            this.setState({ uri: rotUri, base64, processing: false, images: [...this.state.images, { uri, cropped: false }] })
+            const { uri: filUri, base64 } = await this.filp(uriToCrop, orientation)
+            this.setState({
+                uri: filUri, base64, processing: false,
+                images: [...this.state.images, {
+                    uri: filUri, cropped: false
+                }]
+            })
         })
     }
 
@@ -246,7 +249,7 @@ class ExpoImageManipulator extends Component {
     };
 
     rotate = async (uri, width2, height2) => {
-        const { saveOptions } = this.props
+        const { saveOptions } = this.props;
         const manipResult = await ImageManipulator.manipulateAsync(uri, [{
             rotate: -90,
         }, {
@@ -255,6 +258,7 @@ class ExpoImageManipulator extends Component {
                 // height: this.trueHeight || height2,
             },
         }], saveOptions)
+
         return manipResult
     }
 
@@ -320,6 +324,24 @@ class ExpoImageManipulator extends Component {
     }
 
     render() {
+        if (this.state.processing) {
+            return (
+                <View style={{
+                    flex: 1,
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    zIndex: 9999,
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    width: Dimensions.get('window').width,
+                    height: Dimensions.get('window').height,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <ActivityIndicator size="large" color="#ffffff" />
+                </View>
+            )
+        }
         const {
             isVisible,
             onPictureChoosed,
@@ -335,7 +357,7 @@ class ExpoImageManipulator extends Component {
             processing,
             zoomScale
         } = this.state
-
+        const { sliderValue } = this.state
         let imageRatio = this.actualSize.height / this.actualSize.width
         var originalHeight = Dimensions.get('window').height - 64
         if (isIphoneX()) {
@@ -343,15 +365,14 @@ class ExpoImageManipulator extends Component {
         }
 
         let cropRatio = originalHeight / width
-        let cropWidth = imageRatio < cropRatio ? width : originalHeight / imageRatio
-        let cropHeight = imageRatio < cropRatio ? width * imageRatio : originalHeight
+        let cropWidth = imageRatio < cropRatio ? width : originalHeight / cropRatio
+        let cropHeight = imageRatio < cropRatio ? width * cropRatio : originalHeight
 
         let cropInitialTop = (originalHeight - cropHeight) / 2.0
-        let cropInitialLeft = (width - cropWidth) / 2.0
+        let cropInitialLeft = ((width - (cropWidth / 2)) - 40 / 2) / 2
         if (this.currentSize.width == 0 && cropMode) {
             this.currentSize.width = cropWidth;
             this.currentSize.height = cropHeight;
-
             this.currentPos.top = cropInitialTop;
             this.currentPos.left = cropInitialLeft;
         }
@@ -426,16 +447,26 @@ class ExpoImageManipulator extends Component {
                                     </View>
                                 </View> :
                                 <View style={{ flexDirection: 'row', flex: 1, width: Dimensions.get('window').width }}>
-                                    <TouchableOpacity onPress={() => this.setState({ cropMode: false })} style={{
-                                        width: 32,
-                                        height: 32,
-                                        width: 50,
-                                        maxWidth: 90,
-                                        marginLeft: 5,
-                                        alignItems: 'flex-start',
-                                        flex: 1,
-                                        justifyContent: 'center'
-                                    }}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.setState({
+                                                cropMode: false
+                                            })
+                                            this.forceUpdate();
+                                            const ratio = this.actualSize.height / this.actualSize.width
+                                            this.currentSize.width = Dimensions.get('window').width
+                                            this.currentSize.height = Dimensions.get('window').width * (ratio)
+                                        }}
+                                        style={{
+                                            width: 32,
+                                            height: 32,
+                                            width: 50,
+                                            maxWidth: 90,
+                                            marginLeft: 5,
+                                            alignItems: 'flex-start',
+                                            flex: 1,
+                                            justifyContent: 'center'
+                                        }}>
                                         <Icon size={24} name={'arrow-left'} color="white" />
                                     </TouchableOpacity>
                                     <View style={{
@@ -503,20 +534,6 @@ class ExpoImageManipulator extends Component {
                         width: Dimensions.get('window').width,
                         height: Dimensions.get('window').height
                     }}>
-                        {this.state.processing && <View style={{
-                            flex: 1,
-                            position: 'absolute',
-                            left: 0,
-                            top: 0,
-                            zIndex: 9999,
-                            backgroundColor: 'rgba(0,0,0,0.7)',
-                            width: Dimensions.get('window').width,
-                            height: Dimensions.get('window').height,
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                            <ActivityIndicator size="large" color="#ffffff" />
-                        </View>}
                         <ScrollView
                             ref={'imageScrollView'}
                             style={{ position: 'relative', flex: 1 }}
@@ -536,9 +553,11 @@ class ExpoImageManipulator extends Component {
                         >
                             {!cropMode && this.state.images.length >= 2 && <TouchableOpacity activeOpacity={0.85} onPress={() => {
                                 let found = true;
+                                let cropData = {};
                                 const images = this.state.images.filter((item, index) => {
                                     if (index === this.state.images.length - 1) {
                                         found = !item?.cropped
+                                        cropData = item;
                                         return false
                                     }
                                     return true;
@@ -548,18 +567,25 @@ class ExpoImageManipulator extends Component {
                                     uri: images[images.length - 1]?.uri,
                                     cropped: found && this.state.cropped
                                 })
-                            }} style={{
-                                width: 100,
-                                height: 45,
-                                position: 'absolute',
-                                zIndex: 9999,
-                                left: 15,
-                                top: 15,
-                                borderRadius: 22.5,
-                                backgroundColor: 'white',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}>
+                                if (cropData.ratio) {
+                                    this.actualSize.width = cropData.width
+                                    this.actualSize.height = cropData.height
+                                    this.currentSize.width = Dimensions.get('window').width
+                                    this.currentSize.height = Dimensions.get('window').width * (1 / cropData.ratio)
+                                }
+                            }}
+                                style={{
+                                    width: 100,
+                                    height: 45,
+                                    position: 'absolute',
+                                    zIndex: 9999,
+                                    left: 15,
+                                    top: 15,
+                                    borderRadius: 22.5,
+                                    backgroundColor: 'white',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
                                 <Text style={{
                                     fontFamily: this.props.fontFamilyMedium,
                                     letterSpacing: -0.72,
@@ -574,13 +600,13 @@ class ExpoImageManipulator extends Component {
                                     backgroundColor: 'black',
                                     borderRadius: 0.1,
                                     borderStyle: 'dashed',
-                                    resizeMode: "contain",
-                                    width: Dimensions.get('window').width
+                                    flex: 1
                                 }}
                                 source={{ uri: this.state.images[this.state.images.length - 1]?.uri }}
-                                width={Dimensions.get('window').width}
+                                width={width}
                                 resizeMode={imageRatio >= 1 ? "contain" : 'contain'}
                                 onLayout={this.calculateMaxSizes}
+
                             />
                             }
                             <View>
@@ -589,9 +615,9 @@ class ExpoImageManipulator extends Component {
                                     style={{
                                         backgroundColor: 'black',
                                         borderRadius: 0.1,
-                                        borderStyle: 'dashed'
+                                        borderStyle: 'dashed',
                                     }}
-                                    source={{ uri }}
+                                    source={{ uri: this.state.images[this.state.images.length - 1]?.uri }}
                                     resizeMode={imageRatio >= 1 ? "contain" : 'contain'}
                                     width={width}
                                     onLayout={this.calculateMaxSizes}
@@ -599,23 +625,63 @@ class ExpoImageManipulator extends Component {
                                 }
                                 {cropMode && (
                                     <ImageCropOverlay
+                                        ref={overlay => this._overlay = overlay}
                                         onLayoutChanged={(top, left, width, height) => {
-                                            this.currentSize.width = width;
-                                            this.currentSize.height = height;
-                                            this.currentPos.top = top
-                                            this.currentPos.left = left
+                                            this.currentSize.width = width <= height ? width - 0.5 : height - 0.5;
+                                            this.currentSize.height = width <= height ? width - 0.5 : height - 0.5;
+                                            this.currentPos.top = top + 0.5;
+                                            this.currentPos.left = left + 0.5;
                                         }}
-                                        initialWidth={cropWidth}
-                                        initialHeight={cropWidth || cropHeight}
+                                        initialWidth={this.state.initalValue || cropWidth < cropHeight ? cropWidth : cropHeight}
+                                        initialHeight={this.state.initalValue || cropWidth < cropHeight ? cropWidth : cropHeight}
                                         initialTop={cropInitialTop}
                                         initialLeft={cropInitialLeft}
-
                                         maxWidth={this.currentSize.width}
-                                        maxHeight={this.currentSize.height} />
+                                        maxHeight={this.currentSize.height}
+
+                                    />
                                 )
                                 }
                             </View>
                         </ScrollView>
+                        {cropMode && (
+                            <View style={{
+                                position: 'absolute',
+                                left: 0,
+                                bottom: 0,
+                                height: 60,
+                                width: '100%',
+                                backgroundColor: 'black',
+                                justifyContent: 'center',
+                                flexDirection: 'row'
+                            }}>
+                                <View style={{ flex: 1, justifyContent: 'center' }}>
+                                    <Slider
+                                        maximumValue={100}
+                                        minimumValue={50}
+                                        thumbTintColor={'white'}
+                                        minimumTrackTintColor={'#04D684'}
+                                        step={1}
+                                        value={sliderValue}
+                                        onSlidingComplete={(value) => {
+                                            this.setState({
+                                                sliderValue: parseInt(value),
+                                            })
+                                        }}
+                                        onValueChange={(value) => {
+                                            var calcVal = parseInt(value) * (cropWidth < cropHeight ? cropWidth : cropHeight) / 100;
+                                            this._overlay.setState(state => ({
+                                                initialWidth: calcVal,
+                                                initialHeight: calcVal
+                                            }))
+                                        }}
+                                    />
+                                </View>
+                                <View style={{ width: 30, height: 60, flex: 1, maxWidth: 61, justifyContent: 'center', alignItems: 'center' }}>
+                                    {this.props.sliderIcon}
+                                </View>
+                            </View>
+                        )}
                     </View>
                 </Modal>
             )
@@ -633,6 +699,7 @@ ExpoImageManipulator.defaultProps = {
         done: 'Done',
         processing: 'Processing',
     },
+    sliderIcon: (<View />),
     fontFamilyNormal: '',
     fontFamilyMedium: '',
     fontFamilyBold: '',
@@ -656,6 +723,6 @@ ExpoImageManipulator.propTypes = {
     resizeVelocity: PropTypes.number,
     fontFamilyNormal: PropTypes.string,
     fontFamilyMedium: PropTypes.string,
-    fontFamilyBold: PropTypes.string
-
+    fontFamilyBold: PropTypes.string,
+    sliderIcon: PropTypes.element
 }
