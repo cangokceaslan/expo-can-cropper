@@ -635,10 +635,8 @@ class ExpoImageManipulator extends Component {
                                         }}
                                         initialWidth={this.state.initalValue || cropWidth < cropHeight ? cropWidth : cropHeight}
                                         initialHeight={this.state.initalValue || cropWidth < cropHeight ? cropWidth : cropHeight}
-                                        initialTop={cropInitialTop}
-                                        initialLeft={cropInitialLeft}
-                                        width={this.currentSize.width}
-                                        height={width * (this.currentSize.height / this.currentSize.width)}
+                                        initialTop={cropWidth < cropHeight ? (Dimensions.get('window').height / 2) - (cropWidth / 2) : cropInitialTop}
+                                        initialLeft={cropWidth < cropHeight ? cropInitialLeft : (Dimensions.get('window').width / 2) - (cropHeight / 2)}
                                         maxWidth={width}
                                         maxHeight={width * (this.currentSize.height / this.currentSize.width)}
                                     />
