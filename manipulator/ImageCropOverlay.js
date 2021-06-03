@@ -64,7 +64,6 @@ class ImageCropOverlay extends React.Component {
         if (style.height < this.props.minHeight) {
             style.height = this.props.minHeight
         }
-        style.height = style.width;
         if (style.left <= 0) {
             style.left = 1;
         }
@@ -77,7 +76,11 @@ class ImageCropOverlay extends React.Component {
         if (style.left + style.width >= this.state.maxWidth) {
             style.left = (this.state.maxWidth - style.width) - 1
         }
-
+        if (this.props.maxHeight >= this.props.maxWidth) {
+            style.height = style.width;
+        } else {
+            style.width = style.height;
+        }
         this.state.currentTop = style.top;
         this.state.currentLeft = style.left;
         return (
