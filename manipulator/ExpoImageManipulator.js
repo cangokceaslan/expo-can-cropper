@@ -637,7 +637,7 @@ class ExpoImageManipulator extends Component {
                                         initialTop={cropInitialTop}
                                         initialLeft={cropInitialLeft}
                                         maxWidth={this.currentSize.width}
-                                        maxHeight={this.currentSize.height}
+                                        maxHeight={width * (this.actualSize.height / this.actualSize.width)}
 
                                     />
                                 )
