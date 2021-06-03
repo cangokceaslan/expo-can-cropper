@@ -1,6 +1,6 @@
 {
   "name": "expo-can-cropper",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Custom Cropper for Square Cropping",
   "main": "index.js",
   "dependencies": {

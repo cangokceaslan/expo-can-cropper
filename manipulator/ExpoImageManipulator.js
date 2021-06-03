@@ -489,8 +489,8 @@ class ExpoImageManipulator extends Component {
                                                 textAlignVertical: 'center',
                                                 flex: 1
                                             }}>
-                                            Fotoğrafı Kare Olarak Kesin
-                                            </Text>
+                                            {!this.state.updated ? `Fotoğrafı kesmek için hizala` : `Fotoğrafı Kare Olarak Kesin`}
+                                        </Text>
                                     </View>
                                     <View style={{
                                         flex: 1,
@@ -499,31 +499,34 @@ class ExpoImageManipulator extends Component {
                                         width: 90,
                                         maxWidth: 91
                                     }}>
-                                        <TouchableOpacity
-                                            disabled={this.state.processing}
-                                            onPress={() => this.onCropImage()}
-                                            style={{
-                                                marginRight: 0,
-                                                width: 80,
-                                                height: 32,
-                                                borderRadius: 5,
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                backgroundColor: "#04D684"
-                                            }}>
-                                            <Text
+                                        {
+                                            this.state.updated &&
+                                            <TouchableOpacity
+                                                disabled={this.state.processing}
+                                                onPress={() => this.onCropImage()}
                                                 style={{
-                                                    fontFamily: this.props.fontFamilyMedium,
-                                                    color: 'black',
-                                                    fontSize: 16,
-                                                    letterSpacing: -0.62
-                                                }}>{
-                                                    processing
-                                                        ? this.props.btnTexts?.processing
-                                                        : this.props.btnTexts?.crop
-                                                }
-                                            </Text>
-                                        </TouchableOpacity>
+                                                    marginRight: 0,
+                                                    width: 80,
+                                                    height: 32,
+                                                    borderRadius: 5,
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    backgroundColor: "#04D684"
+                                                }}>
+                                                <Text
+                                                    style={{
+                                                        fontFamily: this.props.fontFamilyMedium,
+                                                        color: 'black',
+                                                        fontSize: 16,
+                                                        letterSpacing: -0.62
+                                                    }}>{
+                                                        processing
+                                                            ? this.props.btnTexts?.processing
+                                                            : this.props.btnTexts?.crop
+                                                    }
+                                                </Text>
+                                            </TouchableOpacity>
+                                        }
                                     </View>
                                 </View>
                             }
@@ -626,12 +629,17 @@ class ExpoImageManipulator extends Component {
                                 }
                                 {cropMode && (
                                     <ImageCropOverlay
+                                        updatedCallback={() => {
+                                            if (!this.state.updated) {
+                                                this.setState({ updated: true })
+                                            }
+                                        }}
                                         ref={overlay => this._overlay = overlay}
                                         onLayoutChanged={(top, left, width, height) => {
-                                            this.currentSize.width = width <= height ? width - 0.5 : height - 0.5;
-                                            this.currentSize.height = width <= height ? width - 0.5 : height - 0.5;
-                                            this.currentPos.top = top + 0.5;
-                                            this.currentPos.left = left + 0.5;
+                                            this.currentSize.width = width <= height ? width - 1 : height - 1;
+                                            this.currentSize.height = width <= height ? width - 1 : height - 1;
+                                            this.currentPos.top = top + 1;
+                                            this.currentPos.left = left + 1;
                                         }}
                                         initialWidth={this.state.initalValue || cropWidth < cropHeight ? cropWidth : cropHeight}
                                         initialHeight={this.state.initalValue || cropWidth < cropHeight ? cropWidth : cropHeight}

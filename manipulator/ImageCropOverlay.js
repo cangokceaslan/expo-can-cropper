@@ -149,9 +149,9 @@ class ImageCropOverlay extends React.Component {
             </View>
         )
     }
-
     getTappedItem(x, y) {
         let { initialLeft, initialTop, initialWidth, initialHeight } = this.state
+        this.props.updatedCallback();
         let xPos = parseInt((x - initialLeft) / (initialWidth / 3))
         let yPos = parseInt((y - initialTop) / (initialWidth / 3))
         let index = ((yPos * 3 + xPos) % 9).toFixed(0)
